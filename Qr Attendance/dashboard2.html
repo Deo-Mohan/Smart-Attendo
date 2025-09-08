@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Teacher Dashboard</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <style type="text/tailwindcss">
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F8F9FA;
+        }
+        .sidebar {
+            background-color: #FFFFFF;
+            border-right: 1px solid #E5E7EB;
+            transition: all 0.3s ease-in-out;
+        }
+        .sidebar a {
+            color: #4B5563;
+            transition: all 0.2s ease-in-out;
+        }
+        .sidebar a.active,
+        .sidebar a:hover {
+            background-color: #F3F4F6;
+            color: #1F2937;
+            transform: translateX(4px);
+        }
+        .sidebar a.active {
+            font-weight: 600;
+            box-shadow: inset 3px 0 0 0 #4F46E5;
+        }
+        .main-content {
+            background-color: #F8F9FA;
+        }
+        .btn-primary {
+            background-color: #4F46E5;
+            color: white;
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            background-color: #4338CA;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        .btn-primary:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+        .card {
+            background-color: #FFFFFF;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease-in-out;
+        }
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.07), 0 4px 6px -4px rgba(0, 0, 0, 0.07);
+        }
+        .subject-card {
+            transition: all 0.2s ease-in-out;
+        }
+        .subject-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+        }
+        tbody tr {
+            transition: background-color 0.2s ease-in-out;
+        }
+        tbody tr:hover {
+            background-color: #F9FAFB;
+        }
+        [data-collapsible] {
+            cursor: pointer;
+        }
+        [data-collapsible-content] {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out;
+        }
+        [data-collapsible-content].expanded {
+            max-height: 1000px;
+        }
+        .rotate-180 {
+            transform: rotate(180deg);
+            transition: transform 0.3s ease-in-out;
+        }
+    </style>
+</head>
+<body class="flex h-screen">
+    <aside class="sidebar w-64 p-6 flex-col justify-between hidden sm:flex">
+        <div>
+            <div class="flex items-center mb-10">
+                <span class="material-symbols-outlined text-3xl mr-2 text-indigo-600">school</span>
+                <span class="text-2xl font-bold text-gray-800">Smart</span>
+            </div>
+            <nav>
+                <ul>
+                    <li class="mb-2">
+                        <a class="flex items-center p-3 rounded-lg" href="#">
+                            <span class="material-symbols-outlined mr-3">dashboard</span>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="mb-2">
+                        <a class="flex items-center p-3 rounded-lg" href="#">
+                            <span class="material-symbols-outlined mr-3">class</span>
+                            <span>My classes</span>
+                        </a>
+                    </li>
+                    <li class="mb-2">
+                        <a class="flex items-center p-3 rounded-lg active" href="#">
+                            <span class="material-symbols-outlined mr-3">groups</span>
+                            <span>Students</span>
+                        </a>
+                    </li>
+                    <li class="mb-2">
+                        <a class="flex items-center p-3 rounded-lg" href="#">
+                            <span class="material-symbols-outlined mr-3">calendar_month</span>
+                            <span>Schedule</span>
+                        </a>
+                    </li>
+                    <li class="mb-2">
+                        <a class="flex items-center p-3 rounded-lg" href="#">
+                            <span class="material-symbols-outlined mr-3">chat_bubble</span>
+                            <span>Messages</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="flex items-center p-3 rounded-lg" href="#">
+                            <span class="material-symbols-outlined mr-3">settings</span>
+                            <span>Settings</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <div>
+            <a class="flex items-center p-3 rounded-lg" href="index.html">
+                <span class="material-symbols-outlined mr-3">logout</span>
+                <span>Log Out</span>
+            </a>
+        </div>
+    </aside>
+    <main class="flex-1 flex flex-col">
+        <header class="bg-white border-b border-gray-200 p-4 flex justify-between items-center">
+            <div class="flex items-center">
+                <button class="sm:hidden mr-4 text-gray-500">
+                    <span class="material-symbols-outlined">menu</span>
+                </button>
+                <h1 class="text-xl font-semibold text-gray-800">Instructor Dashboard</h1>
+            </div>
+            <div class="flex items-center space-x-6">
+                <div class="relative inline-block text-left">
+                    <button class="inline-flex items-center justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none transition-colors" type="button">
+                        ENG
+                        <span class="material-symbols-outlined ml-2 -mr-1">expand_more</span>
+                    </button>
+                </div>
+                <div class="flex items-center">
+                    <img alt="Teacher's profile picture" class="h-10 w-10 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDKxkbW5INtbt6sUqKwcHAubFFoQ1Fdl8__aBE3McGkZX-XWCF6A6jzs5gUQkQ5Jkbb0a7mHwQTsUhaKLg42gRpWGNcJtQ_ejLsWT_DHjOfcyOlqH6dTYroYfGUY_djoXTUanyXc0-0ExvMKBYX_Kmtkgl_qJ3KuHTNi7fMEcxHNgvotepc_ceNNuzPVZWtmZakoQBoSoi7kBn65TWUhT4ntASfnA-1d8MYsKtcwzn_G7k_P783qoK-8SqN2ZjcnWcmsPXWY8WzDqYz" />
+                    <div class="ml-3 hidden md:block">
+                        <p class="font-semibold text-gray-800">Dr. Bhawna Pillai</p>
+                        <p class="text-sm text-gray-500">Teacher</p>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <div class="flex-1 p-6 md:p-8 overflow-y-auto main-content">
+            <div class="mb-8">
+                <h2 class="text-2xl font-bold text-gray-900">Welcome back, Dr. Bhawna pillai</h2>
+                <p class="text-gray-600">Here's what's happening today.</p>
+            </div>
+            <div class="card p-6 mb-8" data-collapsible="" id="subjects-card">
+                <div class="flex justify-between items-center mb-6 cursor-pointer">
+                    <h3 class="text-lg font-semibold text-gray-800">Subjects</h3>
+                    <div class="flex items-center space-x-4">
+                        <button class="btn-primary py-2 px-4 rounded-lg flex items-center shadow-sm">
+                            <span class="material-symbols-outlined mr-2 text-sm">add</span>
+                            <span>Add Subject</span>
+                        </button>
+                        <span class="material-symbols-outlined text-gray-500 transition-transform" data-arrow="">expand_more</span>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4" data-collapsible-content="">
+                    <div class="bg-indigo-50 p-4 rounded-lg text-center subject-card">
+                        <p class="font-semibold text-indigo-800">OOPM</p>
+                    </div>
+                    <div class="bg-emerald-50 p-4 rounded-lg text-center subject-card">
+                        <p class="font-semibold text-emerald-800">DBMS</p>
+                    </div>
+                    <div class="bg-amber-50 p-4 rounded-lg text-center subject-card">
+                        <p class="font-semibold text-amber-800">Computer Networks</p>
+                    </div>
+                    <div class="bg-violet-50 p-4 rounded-lg text-center subject-card">
+                        <p class="font-semibold text-violet-800">Data Structures</p>
+                    </div>
+                </div>
+            </div>
+            <div class="card p-6 mb-8" data-collapsible="" id="qr-settings-card">
+                <div class="flex justify-between items-center mb-6 cursor-pointer">
+                    <h3 class="text-lg font-semibold text-gray-800">QR Generation Settings</h3>
+                    <span class="material-symbols-outlined text-gray-500 transition-transform" data-arrow="">expand_more</span>
+                </div>
+                <div data-collapsible-content="">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2" for="subject">Subject</label>
+                            <select class="w-full p-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 transition-all" id="subject" name="subject">
+                                <option>Select Subject</option>
+                                <option>OOPM</option>
+                                <option>DBMS</option>
+                                <option>Computer Networks</option>
+                                <option>Data Structures</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2" for="branch">Select Branch</label>
+                            <select class="w-full p-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 transition-all" id="branch" name="branch">
+                                <option>Select Branch</option>
+                                <option>Computer Science</option>
+                                <option>Information Technology</option>
+                                <option>Electronics</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2" for="section">Select Section</label>
+                            <select class="w-full p-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 transition-all" id="section" name="section">
+                                <option>Select Section</option>
+                                <option>A</option>
+                                <option>B</option>
+                                <option>C</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2" for="refresh-time">Attendance Refreshing Time</label>
+                            <select class="w-full p-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 transition-all" id="refresh-time" name="refresh-time">
+                                <option>Select Time</option>
+                                <option>15 seconds</option>
+                                <option>30 seconds</option>
+                                <option>1 minute</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mt-8 flex justify-end">
+                        <a href="qr-view.html">
+                            <button class="btn-primary py-2.5 px-6 rounded-lg flex items-center shadow-sm">
+                                <span class="material-symbols-outlined mr-2">qr_code_2</span>
+                                Generate QR
+                            </button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="card p-6" data-collapsible="" id="attendance-report-card">
+                <div class="flex justify-between items-center mb-4 cursor-pointer">
+                    <h3 class="text-lg font-semibold text-gray-800">Attendance Report</h3>
+                    <span class="material-symbols-outlined text-gray-500 transition-transform" data-arrow="">expand_more</span>
+                </div>
+                <div class="overflow-x-auto" data-collapsible-content="">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" scope="col">Student Name</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" scope="col">Roll No.</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" scope="col">Subject</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" scope="col">Date</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" scope="col">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Krishna Mohan</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">01</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">OOPM</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2024-05-21</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                    <span class="px-2.5 py-0.5 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Present</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Rishi Raj</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">02</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">OOPM</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2024-05-21</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                    <span class="px-2.5 py-0.5 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Absent</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Abhay Raj</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">03</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">DBMS</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2024-05-21</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                    <span class="px-2.5 py-0.5 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Present</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <footer class="bg-white p-4 text-center text-gray-500 text-sm border-t mt-auto">
+            <p>© 2024 LNCTS. All rights reserved.</p>
+        </footer>
+    </main>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const collapsibleTriggers = document.querySelectorAll('[data-collapsible]');
+            collapsibleTriggers.forEach(trigger => {
+                const content = trigger.querySelector('[data-collapsible-content]');
+                const arrow = trigger.querySelector('[data-arrow]');
+                // Initially open the sections
+                content.classList.add('expanded');
+                if (arrow) {
+                    arrow.classList.add('rotate-180');
+                }
+                trigger.querySelector('.cursor-pointer').addEventListener('click', (e) => {
+                    // prevent clicks on buttons inside from triggering collapse
+                    if (e.target.closest('button')) {
+                        return;
+                    }
+                    content.classList.toggle('expanded');
+                    if (arrow) {
+                        arrow.classList.toggle('rotate-180');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

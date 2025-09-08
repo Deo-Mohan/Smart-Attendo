@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Faculty Sign Up - Smart Attendo</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <style type="text/tailwindcss">
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        @keyframes blob-animation {
+            0% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(20vw, 15vh) scale(1.1); }
+            50% { transform: translate(5vw, 30vh) scale(0.9); }
+            75% { transform: translate(-15vw, 10vh) scale(1.2); }
+            100% { transform: translate(0, 0) scale(1); }
+        }
+        .animated-background-blob {
+            animation: blob-animation 20s infinite alternate ease-in-out;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 min-h-screen flex flex-col relative">
+
+    <div aria-hidden="true" class="absolute inset-0 -z-10 overflow-hidden">
+        <div class="animated-background-blob absolute w-80 h-80 rounded-full bg-gradient-to-r from-teal-300 to-blue-400 opacity-80 mix-blend-multiply filter blur-2xl top-10 left-1/4" style="animation-delay: 0s;"></div>
+        <div class="animated-background-blob absolute w-96 h-96 rounded-full bg-gradient-to-r from-purple-300 to-pink-400 opacity-80 mix-blend-multiply filter blur-2xl bottom-20 right-1/4" style="animation-delay: 6s;"></div>
+        <div class="animated-background-blob absolute w-72 h-72 rounded-full bg-gradient-to-r from-blue-300 to-green-300 opacity-80 mix-blend-multiply filter blur-2xl top-1/2 left-10" style="animation-delay: 12s;"></div>
+    </div>
+
+    <header class="bg-white/80 shadow-sm backdrop-blur-md sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <span class="material-icons text-teal-500" style="font-size: 36px;">qr_code_scanner</span>
+                <span class="text-2xl font-bold text-gray-800">Smart Attendo</span>
+            </div>
+            <div class="hidden md:flex items-center space-x-8">
+                <a class="text-gray-600 hover:text-teal-500" href="#">Features</a>
+                <a class="text-gray-600 hover:text-teal-500" href="#">About</a>
+                <a class="text-gray-600 hover:text-teal-500" href="#">Contact</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="flex-grow container mx-auto px-6 py-12 flex flex-col items-center justify-center relative z-10">
+        <div class="w-full max-w-2xl">
+            <div class="bg-white/90 backdrop-blur-lg p-8 sm:p-10 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-gray-100">
+                <h1 class="text-3xl font-bold text-gray-800 mb-2 text-center">Sign Up !</h1>
+                <p class="text-gray-500 mb-8 text-center">Join our platform to streamline attendance tracking.</p>
+
+                <form class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700" for="fullName">Full Name</label>
+                            <input class="mt-1 appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm" id="fullName" name="fullName" required type="text" placeholder="Dr. Bhawna Pillai" />
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700" for="email">Email Address</label>
+                            <input class="mt-1 appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm" id="email" name="email" required type="email" placeholder="lnctsbhopal@lnct.ac.in" />
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700" for="college">College / Institution</label>
+                            <input class="mt-1 appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm" id="college" name="college" required type="text" placeholder="LNCTS" />
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700" for="facultyId">Faculty ID</label>
+                            <input class="mt-1 appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm" id="facultyId" name="facultyId" required type="text" placeholder="GTU-F-12345" />
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700" for="password">Password</label>
+                            <div class="mt-1 relative">
+                                <input class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm" id="password" name="password" required type="password" />
+                                <span class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5">
+                                    <i class="material-icons text-gray-400 cursor-pointer toggle-password">visibility_off</i>
+                                </span>
+                            </div>
+                        </div>
+                         <div>
+                            <label class="block text-sm font-medium text-gray-700" for="confirmPassword">Confirm Password</label>
+                             <div class="mt-1 relative">
+                                <input class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm" id="confirmPassword" name="confirmPassword" required type="password" />
+                                 <span class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5">
+                                    <i class="material-icons text-gray-400 cursor-pointer toggle-password">visibility_off</i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Gender</label>
+                        <div class="mt-2 flex items-center space-x-6">
+                            <label class="inline-flex items-center">
+                                <input type="radio" class="form-radio h-4 w-4 text-teal-600" name="gender" value="male">
+                                <span class="ml-2 text-gray-700">Male</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="radio" class="form-radio h-4 w-4 text-teal-600" name="gender" value="female">
+                                <span class="ml-2 text-gray-700">Female</span>
+                            </label>
+                             <label class="inline-flex items-center">
+                                <input type="radio" class="form-radio h-4 w-4 text-teal-600" name="gender" value="other">
+                                <span class="ml-2 text-gray-700">Other</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="pt-4">
+                        <button class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-lg font-medium text-white bg-teal-500 hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 transition-all transform hover:-translate-y-0.5" type="submit">Create Account</button>
+                    </div>
+                </form>
+                <p class="mt-8 text-center text-sm text-gray-500">
+                    Already have an account?
+                    <a class="font-medium text-teal-600 hover:text-teal-500" href="index.html">
+                        Sign In
+                    </a>
+                </p>
+            </div>
+        </div>
+    </main>
+    
+    <footer class="w-full py-6 relative z-10">
+        <div class="container mx-auto px-6 text-center text-sm text-gray-500">
+            <p>&copy; 2025 Smart Attendo. All Rights Reserved.</p>
+            <p class="mt-1">Made with <span class="text-red-500">&hearts;</span> in India</p>
+        </div>
+    </footer>
+
+    <script>
+        document.querySelectorAll('.toggle-password').forEach(icon => {
+            icon.addEventListener('click', function() {
+                const passwordInput = this.closest('.relative').querySelector('input');
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                this.textContent = this.textContent === 'visibility' ? 'visibility_off' : 'visibility';
+            });
+        });
+    </script>
+</body>
+</html>
+

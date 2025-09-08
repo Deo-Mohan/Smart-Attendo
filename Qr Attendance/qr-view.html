@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Attendance QR</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <!-- Google Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&amp;display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <!-- PDF Generation Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.autotable.min.js"></script>
+
+    <style type="text/tailwindcss">
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Animation classes */
+        .initial-state {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+        }
+
+        .loaded-state {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Custom scrollbar */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #94a3b8;
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #64748b;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+
+    <!-- Main container card -->
+    <div id="main-card" class="bg-white p-6 md:p-8 rounded-2xl shadow-2xl w-full max-w-6xl relative transition-all duration-500 transform scale-95 opacity-0">
+        <!-- Close Button -->
+        <button id="close-button" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 hover:rotate-90 transition-transform duration-300 z-10">
+            <span class="material-symbols-outlined text-3xl">close</span>
+        </button>
+
+        <!-- Grid Layout -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+            <!-- Left Column: QR Code -->
+            <div class="flex flex-col items-center justify-center p-2 md:border-r md:border-gray-200 md:pr-8">
+                <div class="flex items-center mb-6 initial-state" style="transition-delay: 100ms;">
+                    <svg class="h-10 w-10 text-blue-500" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"></path>
+                        <path d="M0 0h24v24H0z" fill="none"></path>
+                        <path d="M16.59 7.58L10 14.17l-3.59-3.58L5 12l5 5 8-8z"></path>
+                    </svg>
+                    <h1 class="text-3xl font-bold text-gray-800 ml-3">Attendance QR</h1>
+                </div>
+
+                <div class="relative group initial-state" style="transition-delay: 200ms;">
+                    <img alt="QR code for attendance" id="qr-image" class="w-64 h-64 rounded-lg shadow-lg transition-transform duration-300 group-hover:scale-105" src="https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=https://example.com/attendance/1234" />
+                    <div id="qr-overlay" class="absolute inset-0 bg-black bg-opacity-0 flex items-center justify-center rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <button id="fullscreen-btn" class="text-white flex items-center bg-blue-500 px-4 py-2 rounded-lg shadow-md hover:bg-blue-600 transition-all transform hover:scale-110">
+                            <span class="material-symbols-outlined mr-2">fullscreen</span>
+                            View Fullscreen
+                        </button>
+                    </div>
+                </div>
+
+                <div id="timer-container" class="flex items-center justify-center space-x-2 text-red-500 mt-6 initial-state" style="transition-delay: 300ms;">
+                    <span class="material-symbols-outlined animate-pulse">timer</span>
+                    <p id="timer" class="text-lg font-medium">Expires in: 00:30</p>
+                </div>
+
+                <p class="text-gray-600 text-center text-md mt-4 max-w-sm initial-state" style="transition-delay: 400ms;">
+                    Scan this QR code with your smartphone for attendance. Your presence matters!
+                </p>
+            </div>
+
+            <!-- Right Column: Attendance Report -->
+            <div class="flex flex-col">
+                <div class="flex justify-between items-center mb-4 initial-state" style="transition-delay: 500ms;">
+                    <h2 class="text-2xl font-semibold text-gray-700">Attendance Report</h2>
+                    <div class="relative">
+                        <input id="search-input" class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-shadow" placeholder="Search student..." type="text" />
+                        <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">search</span>
+                    </div>
+                </div>
+
+                <div class="flex-grow overflow-y-auto border border-gray-200 rounded-lg custom-scrollbar initial-state" style="max-height: 350px; transition-delay: 600ms;">
+                    <table class="w-full text-left">
+                        <thead class="bg-gray-50 sticky top-0 z-1">
+                            <tr>
+                                <th class="p-4 font-semibold text-gray-600">Name</th>
+                                <th class="p-4 font-semibold text-gray-600">Roll No.</th>
+                                <th class="p-4 font-semibold text-gray-600">Time</th>
+                            </tr>
+                        </thead>
+                        <tbody id="attendance-table-body" class="divide-y divide-gray-200">
+                            <!-- Rows will be dynamically filtered -->
+                            <tr><td class="p-4 text-gray-800">Rishi Raj</td><td class="p-4 text-gray-500">12345</td><td class="p-4 text-gray-500">09:01 AM</td></tr>
+                            <tr><td class="p-4 text-gray-800">Abhay Raj</td><td class="p-4 text-gray-500">12346</td><td class="p-4 text-gray-500">09:02 AM</td></tr>
+                            <tr><td class="p-4 text-gray-800">Krishna Mohan</td><td class="p-4 text-gray-500">12347</td><td class="p-4 text-gray-500">09:02 AM</td></tr>
+                            <tr><td class="p-4 text-gray-800">Ramendra Singh</td><td class="p-4 text-gray-500">12348</td><td class="p-4 text-gray-500">09:03 AM</td></tr>
+                            <tr><td class="p-4 text-gray-800">Anushka Yadav</td><td class="p-4 text-gray-500">12349</td><td class="p-4 text-gray-500">09:04 AM</td></tr>
+                            <tr><td class="p-4 text-gray-800">Aarti Pawar</td><td class="p-4 text-gray-500">12350</td><td class="p-4 text-gray-500">09:05 AM</td></tr>
+                            <tr><td class="p-4 text-gray-800">Rahul Kumar</td><td class="p-4 text-gray-500">12351</td><td class="p-4 text-gray-500">09:05 AM</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="mt-6 pt-4 border-t border-gray-200 initial-state" style="transition-delay: 700ms;">
+                    <div class="grid grid-cols-3 gap-4 text-gray-700 mb-4">
+                        <div class="text-center bg-green-50 p-3 rounded-lg"><p class="text-2xl font-bold text-green-500">7</p><p class="text-sm text-gray-500">Present</p></div>
+                        <div class="text-center bg-red-50 p-3 rounded-lg"><p class="text-2xl font-bold text-red-500">3</p><p class="text-sm text-gray-500">Absent</p></div>
+                        <div class="text-center bg-blue-50 p-3 rounded-lg"><p class="text-2xl font-bold text-blue-500">10</p><p class="text-sm text-gray-500">Total</p></div>
+                    </div>
+                    <button id="download-btn" class="w-full bg-blue-500 text-white font-semibold py-3 rounded-lg hover:bg-blue-600 transition-all duration-300 flex items-center justify-center shadow-md hover:shadow-lg transform hover:-translate-y-1">
+                        <span class="material-symbols-outlined mr-2">download</span>
+                        Download Report
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fullscreen QR Modal -->
+    <div id="fullscreen-modal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 z-50 hidden opacity-0 transition-opacity duration-300">
+        <img alt="Fullscreen QR code" id="fullscreen-qr-image" class="max-w-full max-h-full rounded-lg shadow-2xl transform scale-75 transition-transform duration-300" />
+        <button id="modal-close-btn" class="absolute top-6 right-6 text-white text-opacity-80 hover:text-opacity-100">
+            <span class="material-symbols-outlined text-5xl">close</span>
+        </button>
+    </div>
+
+    <script type="module">
+        document.addEventListener('DOMContentLoaded', () => {
+            const { jsPDF } = window.jspdf;
+
+            // --- Elements ---
+            const mainCard = document.getElementById('main-card');
+            const animatedElements = document.querySelectorAll('.initial-state');
+            const searchInput = document.getElementById('search-input');
+            const tableBody = document.getElementById('attendance-table-body');
+            const tableRows = tableBody.getElementsByTagName('tr');
+            const timerEl = document.getElementById('timer');
+            const downloadBtn = document.getElementById('download-btn');
+            const closeButton = document.getElementById('close-button');
+
+            // QR Fullscreen Elements
+            const fullscreenBtn = document.getElementById('fullscreen-btn');
+            const fullscreenModal = document.getElementById('fullscreen-modal');
+            const modalCloseBtn = document.getElementById('modal-close-btn');
+            const qrImage = document.getElementById('qr-image');
+            const fullscreenQrImage = document.getElementById('fullscreen-qr-image');
+            
+            // --- Initial Animations ---
+            setTimeout(() => {
+                 mainCard.classList.remove('scale-95', 'opacity-0');
+                 animatedElements.forEach(el => el.classList.add('loaded-state'));
+            }, 100);
+
+            // --- Countdown Timer ---
+            let timeLeft = 30;
+            const timerInterval = setInterval(() => {
+                timeLeft--;
+                const minutes = String(Math.floor(timeLeft / 60)).padStart(2, '0');
+                const seconds = String(timeLeft % 60).padStart(2, '0');
+                timerEl.textContent = `Expires in: ${minutes}:${seconds}`;
+
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    timerEl.textContent = 'QR Code Expired';
+                    timerEl.parentElement.classList.remove('text-red-500');
+                    timerEl.parentElement.classList.add('text-gray-500');
+                    document.getElementById('qr-image').classList.add('grayscale');
+                    document.getElementById('qr-overlay').classList.add('bg-opacity-70');
+                }
+            }, 1000);
+            
+            // --- Close Button Functionality ---
+            closeButton.addEventListener('click', () => {
+                mainCard.classList.add('scale-95', 'opacity-0');
+                setTimeout(() => {
+                    // You could hide it completely or redirect, here we just keep it hidden
+                     mainCard.style.display = 'none';
+                }, 500)
+            });
+
+            // --- Search Functionality ---
+            searchInput.addEventListener('keyup', () => {
+                const searchTerm = searchInput.value.toLowerCase();
+                for (const row of tableRows) {
+                    const name = row.cells[0].textContent.toLowerCase();
+                    const rollNo = row.cells[1].textContent.toLowerCase();
+                    if (name.includes(searchTerm) || rollNo.includes(searchTerm)) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                }
+            });
+
+            // --- PDF Download Functionality ---
+            downloadBtn.addEventListener('click', () => {
+                const doc = new jsPDF();
+                
+                // Add title
+                doc.setFontSize(20);
+                doc.text("Attendance Report", 14, 22);
+                doc.setFontSize(11);
+                doc.setTextColor(100);
+                const date = new Date().toLocaleDateString();
+                doc.text(`Date: ${date}`, 14, 30);
+
+                // Add summary stats
+                const present = document.querySelector('.text-green-500').textContent;
+                const absent = document.querySelector('.text-red-500').textContent;
+                const total = document.querySelector('.text-blue-500').textContent;
+                doc.text(`Summary: ${present} Present, ${absent} Absent, ${total} Total Students`, 14, 38);
+
+                // Add table
+                doc.autoTable({
+                    html: 'table',
+                    startY: 45,
+                    headStyles: { fillColor: [22, 160, 133] },
+                    theme: 'grid'
+                });
+
+                doc.save('attendance-report.pdf');
+            });
+            
+            // --- QR Fullscreen Modal Logic ---
+            fullscreenBtn.addEventListener('click', () => {
+                fullscreenQrImage.src = qrImage.src;
+                fullscreenModal.classList.remove('hidden');
+                setTimeout(() => {
+                    fullscreenModal.classList.remove('opacity-0');
+                    fullscreenQrImage.classList.remove('scale-75');
+                }, 10);
+            });
+
+            function closeModal() {
+                 fullscreenModal.classList.add('opacity-0');
+                 fullscreenQrImage.classList.add('scale-75');
+                 setTimeout(() => {
+                    fullscreenModal.classList.add('hidden');
+                 }, 300);
+            }
+
+            modalCloseBtn.addEventListener('click', closeModal);
+            fullscreenModal.addEventListener('click', (e) => {
+                if(e.target === fullscreenModal) {
+                    closeModal();
+                }
+            });
+
+        });
+
+//Database integration with firebase
+
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-analytics.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyDDAM5iZB45sQJqlFITMyyQcS3EmAPLXM8",
+    authDomain: "qr-attend-c8c9c.firebaseapp.com",
+    projectId: "qr-attend-c8c9c",
+    storageBucket: "qr-attend-c8c9c.firebasestorage.app",
+    messagingSenderId: "835551062981",
+    appId: "1:835551062981:web:f27d509b3083f4bbcb39ac",
+    measurementId: "G-WPVWNCDE3L"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+
+    </script>
+
+</body>
+</html>

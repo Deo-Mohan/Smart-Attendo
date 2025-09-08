@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>QR Attendance - Teacher Login</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <style type="text/tailwindcss">
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Keyframes for a more dynamic blob animation */
+        @keyframes blob-animation {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 0.8;
+            }
+            25% {
+                transform: translate(20vw, 15vh) scale(1.1);
+                opacity: 0.9;
+            }
+            50% {
+                transform: translate(5vw, 30vh) scale(0.9);
+                opacity: 0.7;
+            }
+            75% {
+                transform: translate(-15vw, 10vh) scale(1.2);
+                opacity: 0.85;
+            }
+            100% {
+                transform: translate(0, 0) scale(1);
+                opacity: 0.8;
+            }
+        }
+
+        .animated-background-blob {
+            animation: blob-animation 20s infinite alternate ease-in-out;
+            will-change: transform, opacity; /* Optimize performance for animation */
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 min-h-screen flex flex-col relative">
+
+    <div aria-hidden="true" class="absolute inset-0 -z-10 overflow-hidden">
+        <div class="animated-background-blob absolute w-80 h-80 rounded-full bg-gradient-to-r from-teal-300 to-blue-400 opacity-80 mix-blend-multiply filter blur-2xl top-10 left-1/4" style="animation-delay: 0s;"></div>
+        <div class="animated-background-blob absolute w-96 h-96 rounded-full bg-gradient-to-r from-purple-300 to-pink-400 opacity-80 mix-blend-multiply filter blur-2xl bottom-20 right-1/4" style="animation-delay: 6s;"></div>
+        <div class="animated-background-blob absolute w-72 h-72 rounded-full bg-gradient-to-r from-blue-300 to-green-300 opacity-80 mix-blend-multiply filter blur-2xl top-1/2 left-10" style="animation-delay: 12s;"></div>
+    </div>
+
+    <header class="bg-white/80 shadow-sm backdrop-blur-md sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <span class="material-icons text-teal-500" style="font-size: 36px;">qr_code_scanner</span>
+                <span class="text-2xl font-bold text-gray-800">Smart Attendo</span>
+            </div>
+            <div class="hidden md:flex items-center space-x-8">
+                <a class="text-gray-600 hover:text-teal-500" href="#">Features</a>
+                <a class="text-gray-600 hover:text-teal-500" href="#">About</a>
+                <a class="text-gray-600 hover:text-teal-500" href="#">Contact</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="flex-grow container mx-auto px-6 py-16 flex flex-col items-center justify-center relative z-10">
+        <div class="w-full max-w-md">
+            <div class="bg-white/90 backdrop-blur-lg p-8 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-gray-100">
+                <h1 class="text-3xl font-bold text-gray-800 mb-2 text-center">Welcome Back!</h1>
+                <p class="text-gray-500 mb-8 text-center">Please enter your details to sign in.</p>
+                <form class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 text-left" for="email">Email address</label>
+                        <div class="mt-1 relative">
+                            <span class="material-icons absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">email</span>
+                            <input autocomplete="email" class="appearance-none block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm" id="email" name="email" required="" type="email" placeholder="krishna@gmail.com" />
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 text-left" for="password">Password</label>
+                        <div class="mt-1 relative">
+                            <span class="material-icons absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">lock</span>
+                            <input autocomplete="current-password" class="appearance-none block w-full pl-10 pr-10 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm" id="password" name="password" required="" type="password" />
+                            <span class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5">
+                                <i class="material-icons text-gray-400 cursor-pointer" id="togglePassword">visibility_off</i>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <input class="h-4 w-4 text-teal-600 focus:ring-teal-500 border-gray-300 rounded" id="remember-me" name="remember-me" type="checkbox" />
+                            <label class="ml-2 block text-sm text-gray-900" for="remember-me">Remember me</label>
+                        </div>
+                        <div class="text-sm">
+                            <a class="font-medium text-teal-600 hover:text-teal-500" href="#">Forgot your password?</a>
+                        </div>
+                    </div>
+                    <div>
+                        <button class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-lg font-medium text-white bg-teal-500 hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 transition-all transform hover:-translate-y-0.5" type="submit">Sign in</button>
+                    </div>
+                </form>
+                <p class="mt-6 text-center text-sm text-gray-500">Not a member? <a class="font-medium text-teal-600 hover:text-teal-500" href="signup-pg.html">Sign up for free</a></p>
+            </div>
+            <div class="text-center mt-12">
+                 <h2 class="text-2xl font-bold text-gray-700">Seamless Attendance Tracking</h2>
+                 <p class="mt-2 max-w-md mx-auto text-gray-600">Monitor student presence effortlessly and keep your focus on teaching.</p>
+            </div>
+            
+            <div class="mt-12 text-center w-full max-w-md">
+                <p class="text-gray-600 mb-2">Are you a student?</p>
+                <a class="inline-flex items-center px-6 py-2 border border-gray-300 text-base font-medium rounded-full text-gray-700 bg-white hover:bg-gray-100 transition-colors" href="#">
+                    <span class="material-icons mr-2">get_app</span>
+                    Download the Student Web App
+                </a>
+            </div>
+        </div>
+    </main>
+    
+    <footer class="w-full py-6 relative z-10">
+        <div class="container mx-auto px-6 text-center text-sm text-gray-500">
+            <p>&copy; 2025 Smart Attendo. All Rights Reserved.</p>
+            <p class="mt-1">Made with <span class="text-red-500">&hearts;</span> in India</p>
+        </div>
+    </footer>
+
+    <script>
+        const togglePassword = document.querySelector('#togglePassword');
+        const password = document.querySelector('#password');
+        togglePassword.addEventListener('click', function(e) {
+            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+            password.setAttribute('type', type);
+            this.textContent = this.textContent === 'visibility' ? 'visibility_off' : 'visibility';
+        });
+    </script>
+</body>
+</html>
